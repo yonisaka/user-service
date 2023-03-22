@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/yonisaka/user-service/grpc/contract"
+	"github.com/yonisaka/user-service/utils"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -55,7 +56,12 @@ func serverAuthorize(ctx context.Context) error {
 		return status.Error(codes.Unauthenticated, "no token provided")
 	}
 
-	// TODO implement checking valid token
+	decoded, err := utils.DecodeBasicAuth(tokenAuth[0])
+	if err != nil {
+		return status.Error(codes.Unauthenticated, "invalid token provided")
+	}
+
+	log.Printf("DECODED: %s\n", decoded)
 	log.Printf("AUTH TOKEN: %s\n", tokenAuth)
 
 	return nil

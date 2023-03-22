@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"time"
 
+	pb "github.com/yonisaka/protobank/log"
 	"github.com/yonisaka/user-service/domain/entity"
-	"github.com/yonisaka/user-service/proto/foo"
 )
 
 // SaveStreamHttpLog is method
-func (c *Handler) SaveStreamHttpLog(stream foo.LogService_SaveStreamHttpLogServer) error {
+func (c *Handler) SaveStreamHttpLog(stream pb.LogService_SaveStreamHttpLogServer) error {
 	var i int32
 	startTime := time.Now()
 	for {
@@ -19,7 +19,7 @@ func (c *Handler) SaveStreamHttpLog(stream foo.LogService_SaveStreamHttpLogServe
 
 		if err == io.EOF {
 			endTime := time.Now()
-			return stream.SendAndClose(&foo.HttpLogStreamResponse{
+			return stream.SendAndClose(&pb.HttpLogStreamResponse{
 				Total:    i,
 				Duration: int32(endTime.Sub(startTime).Seconds()),
 			})
@@ -34,7 +34,7 @@ func (c *Handler) SaveStreamHttpLog(stream foo.LogService_SaveStreamHttpLogServe
 }
 
 // SaveHttpLog is a function
-func (c *Handler) SaveHttpLog(ctx context.Context, r *foo.SaveHttpLogRequest) (*foo.HttpLog, error) {
+func (c *Handler) SaveHttpLog(ctx context.Context, r *pb.SaveHttpLogRequest) (*pb.HttpLog, error) {
 	lg := entity.HttpLog{
 		Ip:     r.GetIp(),
 		Path:   r.GetPath(),
@@ -46,7 +46,7 @@ func (c *Handler) SaveHttpLog(ctx context.Context, r *foo.SaveHttpLogRequest) (*
 		return nil, err
 	}
 
-	return &foo.HttpLog{
+	return &pb.HttpLog{
 		Id:        int64(lg.ID),
 		Ip:        lg.Ip,
 		Path:      lg.Path,
@@ -58,7 +58,7 @@ func (c *Handler) SaveHttpLog(ctx context.Context, r *foo.SaveHttpLogRequest) (*
 }
 
 // FindHttpLog is a function to retrieve single data
-func (c *Handler) FindHttpLog(ctx context.Context, r *foo.FindHttpLogRequest) (*foo.HttpLog, error) {
+func (c *Handler) FindHttpLog(ctx context.Context, r *pb.FindHttpLogRequest) (*pb.HttpLog, error) {
 	id, errC := strconv.ParseInt(r.GetId(), 10, 64)
 	if errC != nil {
 		return nil, errC
@@ -69,7 +69,7 @@ func (c *Handler) FindHttpLog(ctx context.Context, r *foo.FindHttpLogRequest) (*
 		return nil, err
 	}
 
-	return &foo.HttpLog{
+	return &pb.HttpLog{
 		Id:        int64(lg.ID),
 		Ip:        lg.Ip,
 		Path:      lg.Path,
@@ -81,15 +81,15 @@ func (c *Handler) FindHttpLog(ctx context.Context, r *foo.FindHttpLogRequest) (*
 }
 
 // GetHttpLog is a function to retrieve list of data
-func (c *Handler) GetHttpLog(ctx context.Context, _ *foo.GetHttpLogRequest) (*foo.HttpLogs, error) {
+func (c *Handler) GetHttpLog(ctx context.Context, _ *pb.GetHttpLogRequest) (*pb.HttpLogs, error) {
 	r, err := c.repo.HttpLog.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var logs []*foo.HttpLog
+	var logs []*pb.HttpLog
 	for _, lg := range r {
-		logs = append(logs, &foo.HttpLog{
+		logs = append(logs, &pb.HttpLog{
 			Id:        int64(lg.ID),
 			Ip:        lg.Ip,
 			Path:      lg.Path,
@@ -100,7 +100,7 @@ func (c *Handler) GetHttpLog(ctx context.Context, _ *foo.GetHttpLogRequest) (*fo
 		})
 	}
 
-	return &foo.HttpLogs{
+	return &pb.HttpLogs{
 		Logs: logs,
 	}, nil
 }

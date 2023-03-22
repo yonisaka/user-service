@@ -40,10 +40,7 @@ func (r *Router) Init() *gin.Engine {
 	hand := handler.NewHandler(r.repo, r.client)
 
 	httpLog := handler.NewRequestLogHandler(hand)
-	hello := handler.NewHelloHandler(hand)
 
-	e.GET("/api/ping", hello.Ping)
-	e.POST("/api/hello", hello.SayHello)
 	e.POST("/api/request-logs", httpLog.Create)
 
 	return e

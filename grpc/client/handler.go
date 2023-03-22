@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/yonisaka/user-service/proto/foo"
+	pbLog "github.com/yonisaka/protobank/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -36,7 +36,7 @@ func Run() error {
 
 	defer cancel()
 
-	payloads := []*foo.SaveHttpLogRequest{
+	payloads := []*pbLog.SaveHttpLogRequest{
 		{Ip: "1.1.1.1", Path: "/user", Method: "POST"},
 		{Ip: "1.1.1.2", Path: "/user/1", Method: "GET"},
 		{Ip: "1.1.1.3", Path: "/user/2", Method: "GET"},
@@ -49,7 +49,7 @@ func Run() error {
 		{Ip: "1.1.1.10", Path: "/user", Method: "POST"},
 	}
 
-	err = gClient.SaveHttpLog(ctx, payloads)
+	err = gClient.SaveStreamHttpLog(ctx, payloads)
 	if err != nil {
 		return fmt.Errorf("Could not call: %v", err)
 	}

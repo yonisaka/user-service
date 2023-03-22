@@ -6,7 +6,10 @@ proto:
 	done
 
 run:
-	@go run server.go
+	@go run main.go
+
+start:
+	@go run main.go grpc:start
 
 build:
 	@go build -ldflags="-X 'main.Version=${BUILD_VERSION}'" -v -a -installsuffix -o main .

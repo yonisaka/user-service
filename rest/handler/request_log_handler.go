@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yonisaka/user-service/proto/foo"
+	protobank "github.com/yonisaka/protobank/log"
 )
 
 // RequestLogHandler is a struct
@@ -19,7 +19,7 @@ func NewRequestLogHandler(h *Handler) *RequestLogHandler {
 }
 
 func (r *RequestLogHandler) Create(c *gin.Context) {
-	payloads := []*foo.SaveHttpLogRequest{
+	payloads := []*protobank.SaveHttpLogRequest{
 		{Ip: "1.1.1.1", Path: "/user", Method: "POST"},
 		{Ip: "1.1.1.2", Path: "/user/1", Method: "GET"},
 		{Ip: "1.1.1.3", Path: "/user/2", Method: "GET"},
@@ -32,7 +32,7 @@ func (r *RequestLogHandler) Create(c *gin.Context) {
 		{Ip: "1.1.1.10", Path: "/user", Method: "POST"},
 	}
 
-	err := r.client.SaveHttpLog(c, payloads)
+	err := r.client.SaveStreamHttpLog(c, payloads)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error": fmt.Sprintf("%v", err),

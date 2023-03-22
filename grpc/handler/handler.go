@@ -1,17 +1,18 @@
 package handler
 
 import (
+	pbAuth "github.com/yonisaka/protobank/auth"
+	pbLog "github.com/yonisaka/protobank/log"
+	pbUser "github.com/yonisaka/protobank/user"
 	"github.com/yonisaka/user-service/config"
 	"github.com/yonisaka/user-service/domain/service"
-	"github.com/yonisaka/user-service/proto/foo"
 )
 
 // Interface is an interface
 type Interface interface {
-	foo.UserServiceServer
-	foo.HelloServer
-	foo.AuthServer
-	foo.LogServiceServer
+	pbUser.UserServiceServer
+	pbAuth.AuthServer
+	pbLog.LogServiceServer
 }
 
 // Handler is struct
@@ -19,10 +20,9 @@ type Handler struct {
 	config *config.Config
 	repo   *service.Repositories
 
-	foo.UnimplementedUserServiceServer
-	foo.UnimplementedHelloServer
-	foo.UnimplementedAuthServer
-	foo.UnimplementedLogServiceServer
+	pbUser.UnimplementedUserServiceServer
+	pbAuth.UnimplementedAuthServer
+	pbLog.UnimplementedLogServiceServer
 }
 
 // NewHandler is a constructor

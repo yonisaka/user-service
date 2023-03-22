@@ -1,11 +1,13 @@
 package server
 
 import (
+	pbAuth "github.com/yonisaka/protobank/auth"
+	pbLog "github.com/yonisaka/protobank/log"
+	pbUser "github.com/yonisaka/protobank/user"
 	"github.com/yonisaka/user-service/config"
 	"github.com/yonisaka/user-service/domain/service"
 	"github.com/yonisaka/user-service/grpc/handler"
 	"github.com/yonisaka/user-service/grpc/interceptor"
-	"github.com/yonisaka/user-service/proto/foo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -40,10 +42,9 @@ func (s *Server) Run(port int) error {
 	handlers := handler.NewHandler(s.config, s.repo)
 
 	// register service server
-	foo.RegisterUserServiceServer(server, handlers)
-	foo.RegisterHelloServer(server, handlers)
-	foo.RegisterAuthServer(server, handlers)
-	foo.RegisterLogServiceServer(server, handlers)
+	pbUser.RegisterUserServiceServer(server, handlers)
+	pbAuth.RegisterAuthServer(server, handlers)
+	pbLog.RegisterLogServiceServer(server, handlers)
 
 	// register reflection
 	reflection.Register(server)

@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/yonisaka/user-service/proto/foo"
+	protobank "github.com/yonisaka/protobank/log"
 )
 
-// SaveHttpLog is a method
-func (r GRPCClient) SaveHttpLog(ctx context.Context, payloads []*foo.SaveHttpLogRequest) error {
+// SaveStreamHttpLog is a method
+func (r GRPCClient) SaveStreamHttpLog(ctx context.Context, payloads []*protobank.SaveHttpLogRequest) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
