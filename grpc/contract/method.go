@@ -4,10 +4,12 @@ package contract
 // false value indicates that the method is not protected (no authorization needed)
 func ProtectedMethods() map[string]bool {
 	return map[string]bool{
-		"/log.LogService/SaveHttpLog":       false,
-		"/log.LogService/SaveStreamHttpLog": false,
-		"/log.LogService/FindHttpLog":       true,
-		"/log.LogService/GetHttpLog":        true,
+		"/log.LogService/SaveHttpLog":       true,
+		"/log.LogService/SaveStreamHttpLog": true,
 		"/user.UserService/GetUserList":     true,
+		"/user.UserService/GetUser":         true,
+		"/user.UserService/CreateUser":      false,
+		"/user.UserService/UpdateUser":      true,
+		"/user.UserService/DeleteUser":      true,
 	}
 }

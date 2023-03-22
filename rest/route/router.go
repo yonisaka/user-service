@@ -39,9 +39,9 @@ func (r *Router) Init() *gin.Engine {
 
 	hand := handler.NewHandler(r.repo, r.client)
 
-	httpLog := handler.NewRequestLogHandler(hand)
+	auth := handler.NewAuthHandler(hand)
 
-	e.POST("/api/request-logs", httpLog.Create)
+	e.POST("/api/login", auth.AuthLogin)
 
 	return e
 }

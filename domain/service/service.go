@@ -8,10 +8,9 @@ import (
 
 // Repositories is a struct
 type Repositories struct {
-	User      repository.UserRepositoryInterface
-	AuthToken repository.AuthTokenRepository
-	HttpLog   repository.HttpLogRepositoryInterface
-	DB        *gorm.DB
+	User    repository.UserRepositoryInterface
+	HttpLog repository.HttpLogRepositoryInterface
+	DB      *gorm.DB
 }
 
 // NewDBService is constructor

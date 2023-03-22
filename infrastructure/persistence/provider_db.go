@@ -62,7 +62,6 @@ func NewDBConnection(config config.DBConfig) (*gorm.DB, error) {
 
 func AutoMigrate(db *gorm.DB) error {
 	err := db.AutoMigrate(
-		&entity.AuthToken{},
 		&entity.User{},
 		&entity.HttpLog{},
 	)
