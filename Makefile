@@ -5,10 +5,10 @@ proto:
 		echo compiled: $$f; \
 	done
 
-run:
+run-rest:
 	@go run main.go
 
-start:
+run-grpc:
 	@go run main.go grpc:start
 
 build:

@@ -1,5 +1,7 @@
-# GO Simple gRPC
+# USER SERVICE
 
+## Diagram
+![alt diagram](https://github.com/yonisaka/protobank/blob/main/diagram.png?raw=true)
 
 ## Proto compiler
 
@@ -12,18 +14,13 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 ## Installation
 Clone repository
 ```shell
-git clone https://github.com/achjailani/go-simple-grpc.git
+git clone https://github.com/yonisaka/loan-service.git
 ```
 Install
 
 ```shell
-cd go-simple-grpc && go mod download 
+cd loan-service && go mod download 
 ```
-Compile proto
-```shell
-make proto
-```
-
 ## Running Application
 Run gRPC server
 ```shell
