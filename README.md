@@ -16,13 +16,20 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 ## Installation
 Clone repository
 ```shell
-git clone https://github.com/yonisaka/loan-service.git
+git clone https://github.com/yonisaka/user-service.git
 ```
 Install
 
 ```shell
-cd loan-service && go mod download 
+cd user-service && go mod download 
 ```
+
+## Migrate Database
+Run Database Migrate
+```shell
+go run main.go db:migrate
+```
+
 ## Running Application
 Run gRPC server
 ```shell
