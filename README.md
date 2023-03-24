@@ -1,7 +1,7 @@
 # USER SERVICE
 
 ## Diagram
-<img src="https://github.com/yonisaka/protobank/blob/main/diagram.png?raw=true" width="128"/>
+<img src="https://github.com/yonisaka/protobank/blob/main/diagram.png?raw=true" width="400"/>
 
 ## Proto compiler
 
