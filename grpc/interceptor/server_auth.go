@@ -3,6 +3,8 @@ package interceptor
 import (
 	"context"
 	"log"
+	"os"
+	"strings"
 
 	"github.com/yonisaka/user-service/grpc/contract"
 	"github.com/yonisaka/user-service/utils"
@@ -55,14 +57,29 @@ func serverAuthorize(ctx context.Context) error {
 	if !exist {
 		return status.Error(codes.Unauthenticated, "no token provided")
 	}
+	log.Printf("AUTH TOKEN: %s\n", tokenAuth)
 
 	decoded, err := utils.DecodeBasicAuth(tokenAuth[0])
 	if err != nil {
 		return status.Error(codes.Unauthenticated, "invalid token provided")
 	}
-
 	log.Printf("DECODED: %s\n", decoded)
-	log.Printf("AUTH TOKEN: %s\n", tokenAuth)
+
+	username := strings.Split(decoded, ":")[0]
+	password := strings.Split(decoded, ":")[1]
+	log.Printf("USERNAME: %s\n", username)
+
+	if v, exist := os.LookupEnv("FAKE_USERNAME"); exist {
+		if username != v {
+			return status.Error(codes.Unauthenticated, "invalid username provided")
+		}
+	}
+
+	if v, exist := os.LookupEnv("FAKE_PASSWORD"); exist {
+		if password != v {
+			return status.Error(codes.Unauthenticated, "invalid password provided")
+		}
+	}
 
 	return nil
 }

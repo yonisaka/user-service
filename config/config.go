@@ -24,7 +24,13 @@ type Config struct {
 	AppLang     string
 	AppTimeZone string
 	GRPCPort    int
+	JWT         JWT
 	DBConfig
+}
+
+type JWT struct {
+	SignatureKey string
+	Expiration   int
 }
 
 func New() *Config {
@@ -35,6 +41,10 @@ func New() *Config {
 		AppLang:     getEnv("APP_LANG", "en"),
 		AppTimeZone: getEnv("APP_TIMEZONE", ""),
 		GRPCPort:    getEnvAsInt("GRPC_PORT", 9000),
+		JWT: JWT{
+			SignatureKey: getEnv("JWT_SIGNATURE_KEY", "secret"),
+			Expiration:   getEnvAsInt("JWT_EXPIRATION", 3600),
+		},
 		DBConfig: DBConfig{
 			DBDriver:   getEnv("DB_DRIVER", "postgres"),
 			DBHost:     getEnv("DB_HOSt", "localhost"),

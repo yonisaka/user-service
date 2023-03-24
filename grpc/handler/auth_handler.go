@@ -2,8 +2,8 @@ package handler
 
 import (
 	"context"
-	"strings"
 
+	"github.com/golang-jwt/jwt/v4"
 	pb "github.com/yonisaka/protobank/auth"
 	"github.com/yonisaka/user-service/utils"
 	"google.golang.org/grpc/codes"
@@ -38,20 +38,22 @@ func (c *Handler) AuthB2B(ctx context.Context, r *pb.AuthB2BPayload) (*pb.UserRe
 		return nil, status.Error(codes.Unauthenticated, "no token provided")
 	}
 
-	decoded, err := utils.DecodeBasicAuth(token)
+	claims := &utils.JwtClaims{}
+	jwtToken, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(c.config.JWT.SignatureKey), nil
+	})
+
 	if err != nil {
 		return nil, status.Error(codes.Unauthenticated, "invalid token provided")
 	}
 
-	username := strings.Split(decoded, ":")[0]
-	password := strings.Split(decoded, ":")[1]
-	us, err := c.repo.User.FindByUsername(ctx, username)
-
-	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "Invalid username or password")
+	if !jwtToken.Valid {
+		return nil, status.Error(codes.Unauthenticated, "invalid token provided")
 	}
 
-	if password != us.Password {
+	us, err := c.repo.User.FindByUsername(ctx, claims.Username)
+
+	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "Invalid username or password")
 	}
 

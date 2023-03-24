@@ -2,8 +2,10 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/yonisaka/user-service/rest/dto"
 	"github.com/yonisaka/user-service/utils"
 )
@@ -23,6 +25,7 @@ type LoginRequest struct {
 
 type LoginResponse struct {
 	AccessToken string `json:"access_token"`
+	ExpiredAt   string `json:"expired_at"`
 }
 
 func (r *AuthHandler) AuthLogin(c *gin.Context) {
@@ -55,6 +58,24 @@ func (r *AuthHandler) AuthLogin(c *gin.Context) {
 		return
 	}
 
-	res.AccessToken = utils.EncodeBasicAuth(us.Username, us.Password)
+	expirationTime := time.Now().Add(time.Duration(r.config.JWT.Expiration) * time.Minute)
+	claims := &utils.JwtClaims{
+		ID:       int(us.ID),
+		Username: us.Username,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString([]byte(r.config.JWT.SignatureKey))
+	if err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			*dto.NewResponse().WithCode(http.StatusInternalServerError).WithMessage("Error while signing token"),
+		)
+		return
+	}
+	res.AccessToken = tokenString
+	res.ExpiredAt = expirationTime.Format(time.RFC1123)
 	c.JSON(http.StatusOK, *dto.NewResponse().WithCode(http.StatusOK).WithData(res))
 }

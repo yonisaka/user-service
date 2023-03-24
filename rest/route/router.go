@@ -37,7 +37,7 @@ func (r *Router) Init() *gin.Engine {
 	e := gin.Default()
 	e.Use(middleware.Logger())
 
-	hand := handler.NewHandler(r.repo, r.client)
+	hand := handler.NewHandler(r.repo, r.client, r.config)
 
 	auth := handler.NewAuthHandler(hand)
 
