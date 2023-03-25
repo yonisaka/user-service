@@ -27,7 +27,7 @@ func (c *Handler) AuthLogin(ctx context.Context, r *pb.AuthLoginPayload) (*pb.Lo
 
 	return &pb.LoginResponse{
 		Ok:          true,
-		AccessToken: utils.EncodeBasicAuth(us.Username, us.Password),
+		AccessToken: utils.EncodeBasicAuth(us.Username, password),
 	}, nil
 }
 
