@@ -10,6 +10,7 @@
 | ----------- | ----------- |
 | Go | >= 1.19 |
 | PostgreSQL | >= 15.1 |
+| Protoc Gen | >= 1.2 |
 
 ## Proto compiler
 
